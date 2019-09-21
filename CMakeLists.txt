@@ -7,8 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Boost libraries
+# On Ubuntun/Debian apt-get install libboost-dev libboost-system-dev
 set(Boost_USE_STATIC_LIBS ON)
-find_package(Boost 1.62.0 REQUIRED system)
+find_package(Boost REQUIRED system)
+find_package(Threads)
 
 # Always compile in release
 set(CMAKE_BUILD_TYPE Release)
@@ -29,11 +31,15 @@ include_directories(${Boost_INCLUDE_DIR})
 file(GLOB ECHO_SERVER_SOURCES "echo-server/*.cpp")
 
 add_executable(asio-test1-echo-server ${ECHO_SERVER_SOURCES})
-target_link_libraries(asio-test1-echo-server ${Boost_LIBRARIES})
+target_link_libraries(asio-test1-echo-server
+  ${Boost_LIBRARIES}
+  ${CMAKE_THREAD_LIBS_INIT})
 
 # BLOCKING ECHO CLIENT
 
 file(GLOB BLOCKING_ECHO_CLIENT_SOURCES "blocking-echo-client/*.cpp")
 
 add_executable(asio-test1-blocking-echo-client ${BLOCKING_ECHO_CLIENT_SOURCES})
-target_link_libraries(asio-test1-blocking-echo-client ${Boost_LIBRARIES})
+target_link_libraries(asio-test1-blocking-echo-client
+  ${Boost_LIBRARIES}
+  ${CMAKE_THREAD_LIBS_INIT})
